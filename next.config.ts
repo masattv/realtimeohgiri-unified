@@ -21,8 +21,9 @@ const nextConfig: NextConfig = {
   // serverActionsの設定をオブジェクト形式で追加
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:3001', 'localhost:3002']
-    }
+      allowedOrigins: ['localhost:3000', 'localhost:3001', 'localhost:3002', 'realtimeohgiri-unified.vercel.app']
+    },
+    turbo: {}
   }
 };
 
