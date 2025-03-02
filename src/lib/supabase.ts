@@ -12,6 +12,7 @@ export const supabase = createClient(
 );
 
 // リアルタイム変更監視のためのヘルパー関数
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToAnswers(topicId: string, callback: (payload: any) => void) {
   return supabase
     .channel(`answers-${topicId}`)
@@ -29,6 +30,7 @@ export function subscribeToAnswers(topicId: string, callback: (payload: any) => 
 }
 
 // トピックの変更を監視するヘルパー関数
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function subscribeToTopics(callback: (payload: any) => void) {
   return supabase
     .channel('topics')

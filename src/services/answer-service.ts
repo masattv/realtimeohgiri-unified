@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
 import { CreateAnswerInput, Answer } from '@/lib/types';
 import { evaluateAnswer } from '@/lib/openai';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export async function getAnswersByTopicId(topicId: string): Promise<Answer[]> {
   return db.answer.findMany({

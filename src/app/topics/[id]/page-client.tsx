@@ -11,7 +11,7 @@ interface TopicClientProps {
 }
 
 export default function TopicClient({ initialTopic, initialAnswers }: TopicClientProps) {
-  const [topic, setTopic] = useState<Topic>(initialTopic);
+  const [topic, _] = useState<Topic>(initialTopic);
   const [answers, setAnswers] = useState<Answer[]>(initialAnswers);
 
   // 回答を得点順にソート
