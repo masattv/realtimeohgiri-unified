@@ -1,19 +1,45 @@
 import OpenAI from 'openai';
 
-// 環境変数が定義されているか確認（ビルド時に失敗しないよう修正）
-const OPENAI_API_KEY = typeof process !== 'undefined' && process.env && process.env.OPENAI_API_KEY 
-  ? process.env.OPENAI_API_KEY 
-  : 'dummy-key-for-build-process';
+// 環境変数が定義されているか確認（ビルド時と実行時どちらでもエラーが発生しないよう修正）
+const OPENAI_API_KEY = 
+  // process自体が存在するか確認（ビルド時にはundefinedの可能性がある）
+  typeof process !== 'undefined' && 
+  // process.envが存在するか確認
+  process.env && 
+  // OPENAI_API_KEYが存在するか確認
+  process.env.OPENAI_API_KEY 
+    ? process.env.OPENAI_API_KEY 
+    : 'dummy-key-for-build-process';
 
-// APIキーが実際の値でない場合は警告を出す
-if (OPENAI_API_KEY === 'dummy-key-for-build-process' && process.env.NODE_ENV !== 'production') {
+// APIキーが実際の値でない場合は警告を出す（開発環境のみ）
+if (OPENAI_API_KEY === 'dummy-key-for-build-process' && 
+   typeof process !== 'undefined' && 
+   process.env && 
+   process.env.NODE_ENV !== 'production') {
   console.warn('OPENAI_API_KEY環境変数が設定されていません - OpenAI機能は制限されます');
 }
 
-// OpenAIのクライアントインスタンスを作成
-export const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
+// OpenAIのクライアントインスタンスを作成（エラーハンドリング付き）
+let openaiInstance;
+try {
+  openaiInstance = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+  });
+} catch (error) {
+  console.error('OpenAIクライアントの初期化に失敗しました:', error);
+  // ダミーのインスタンスを作成（APIを使おうとするとエラーになるが、ビルドは通る）
+  openaiInstance = {
+    chat: {
+      completions: {
+        create: async () => {
+          throw new Error('OpenAIクライアントが正しく初期化されていません');
+        }
+      }
+    }
+  } as unknown as OpenAI;
+}
+
+export const openai = openaiInstance;
 
 // 大喜利回答の評価関数
 export async function evaluateAnswer(topic: string, answer: string): Promise<number> {
