@@ -2,17 +2,10 @@ import { NextResponse } from 'next/server';
 import { selectBestAnswer, deleteAnswer } from '@/services/answer-service';
 import { ApiResponse, Answer } from '@/lib/types';
 
-// URLパラメータの型定義
-interface RouteParams {
-  params: {
-    id: string
-  }
-}
-
 // 回答を最優秀回答として選択 (PATCH /api/answers/[id])
 export async function PATCH(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     const body = await request.json();
@@ -50,7 +43,7 @@ export async function PATCH(
 // 回答削除 (DELETE /api/answers/[id])
 export async function DELETE(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     await deleteAnswer(params.id);

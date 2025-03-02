@@ -6,17 +6,10 @@ import {
 } from '@/services/topic-service';
 import { ApiResponse, Topic } from '@/lib/types';
 
-// URLパラメータの型定義
-interface RouteParams {
-  params: {
-    id: string
-  }
-}
-
 // 特定のトピック取得 (GET /api/topics/[id])
 export async function GET(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     const topic = await getTopicById(params.id);
@@ -51,7 +44,7 @@ export async function GET(
 // トピック更新 (PATCH /api/topics/[id])
 export async function PATCH(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     const body = await request.json();
@@ -89,7 +82,7 @@ export async function PATCH(
 // トピック削除 (DELETE /api/topics/[id])
 export async function DELETE(
   request: Request,
-  { params }: RouteParams
+  { params }: { params: { id: string } }
 ) {
   try {
     // トピックの存在確認
