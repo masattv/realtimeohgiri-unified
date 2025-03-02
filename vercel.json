@@ -2,7 +2,8 @@
   "crons": [
     {
       "path": "/api/cron/generate-topic?key=USE_ENVIRONMENT_VARIABLE_HERE",
-      "schedule": "0 */4 * * *"
+      "schedule": "0 0 * * *",
+      "description": "毎日午前0時に新しいお題を自動生成（無料プランでは1日1回のみ実行可能）"
     }
   ]
 } 
