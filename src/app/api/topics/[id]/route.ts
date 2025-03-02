@@ -9,10 +9,11 @@ import { ApiResponse, Topic } from '@/lib/types';
 // 特定のトピック取得 (GET /api/topics/[id])
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const topic = await getTopicById(params.id);
+    const { id } = await params;
+    const topic = await getTopicById(id);
     
     if (!topic) {
       const response: ApiResponse<null> = {
@@ -30,7 +31,7 @@ export async function GET(
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Failed to fetch topic ${params.id}:`, error);
+    console.error(`Failed to fetch topic:`, error);
     
     const response: ApiResponse<null> = {
       success: false,
@@ -44,9 +45,10 @@ export async function GET(
 // トピック更新 (PATCH /api/topics/[id])
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     // リクエストボディの検証
@@ -59,7 +61,7 @@ export async function PATCH(
       return NextResponse.json(response, { status: 400 });
     }
     
-    const updatedTopic = await updateTopicStatus(params.id, body.isActive);
+    const updatedTopic = await updateTopicStatus(id, body.isActive);
     
     const response: ApiResponse<Topic> = {
       success: true,
@@ -68,7 +70,7 @@ export async function PATCH(
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Failed to update topic ${params.id}:`, error);
+    console.error(`Failed to update topic:`, error);
     
     const response: ApiResponse<null> = {
       success: false,
@@ -82,11 +84,12 @@ export async function PATCH(
 // トピック削除 (DELETE /api/topics/[id])
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     // トピックの存在確認
-    const topic = await getTopicById(params.id);
+    const topic = await getTopicById(id);
     
     if (!topic) {
       const response: ApiResponse<null> = {
@@ -97,7 +100,7 @@ export async function DELETE(
       return NextResponse.json(response, { status: 404 });
     }
     
-    await deleteTopic(params.id);
+    await deleteTopic(id);
     
     const response: ApiResponse<null> = {
       success: true
@@ -105,7 +108,7 @@ export async function DELETE(
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Failed to delete topic ${params.id}:`, error);
+    console.error(`Failed to delete topic:`, error);
     
     const response: ApiResponse<null> = {
       success: false,

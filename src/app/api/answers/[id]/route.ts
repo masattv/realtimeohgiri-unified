@@ -5,9 +5,10 @@ import { ApiResponse, Answer } from '@/lib/types';
 // 回答を最優秀回答として選択 (PATCH /api/answers/[id])
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     
     // actionパラメータの検証
@@ -20,7 +21,7 @@ export async function PATCH(
       return NextResponse.json(response, { status: 400 });
     }
     
-    const updatedAnswer = await selectBestAnswer(params.id);
+    const updatedAnswer = await selectBestAnswer(id);
     
     const response: ApiResponse<Answer> = {
       success: true,
@@ -29,7 +30,7 @@ export async function PATCH(
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Failed to update answer ${params.id}:`, error);
+    console.error(`Failed to update answer:`, error);
     
     const response: ApiResponse<null> = {
       success: false,
@@ -43,10 +44,11 @@ export async function PATCH(
 // 回答削除 (DELETE /api/answers/[id])
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await deleteAnswer(params.id);
+    const { id } = await params;
+    await deleteAnswer(id);
     
     const response: ApiResponse<null> = {
       success: true
@@ -54,7 +56,7 @@ export async function DELETE(
     
     return NextResponse.json(response);
   } catch (error) {
-    console.error(`Failed to delete answer ${params.id}:`, error);
+    console.error(`Failed to delete answer:`, error);
     
     const response: ApiResponse<null> = {
       success: false,
