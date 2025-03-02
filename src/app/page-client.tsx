@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { Topic } from '@/lib/types';
 import { subscribeToTopics } from '@/lib/supabase';
+import dynamic from 'next/dynamic';
 
 interface HomeClientProps {
   initialTopics: Topic[];
