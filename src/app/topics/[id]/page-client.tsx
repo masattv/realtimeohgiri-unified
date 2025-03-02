@@ -11,6 +11,7 @@ interface TopicClientProps {
 }
 
 export default function TopicClient({ initialTopic, initialAnswers }: TopicClientProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [topic, _] = useState<Topic>(initialTopic);
   const [answers, setAnswers] = useState<Answer[]>(initialAnswers);
 
