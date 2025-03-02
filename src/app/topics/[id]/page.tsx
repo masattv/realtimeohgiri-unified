@@ -7,20 +7,22 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 interface TopicPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function TopicPage({ params }: TopicPageProps) {
-  const topic = await getTopicById(params.id);
+export default async function TopicPage(props: TopicPageProps) {
+  const { id } = await props.params;
+
+  const topic = await getTopicById(id);
 
   if (!topic) {
     notFound();
   }
 
   // トピックIDに関連する回答を取得
-  const answers = await getAnswersByTopicId(params.id);
+  const answers = await getAnswersByTopicId(id);
 
   // クライアントコンポーネントにデータを渡す
   return <TopicClient initialTopic={topic} initialAnswers={answers} />;
