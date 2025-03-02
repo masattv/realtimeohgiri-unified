@@ -5,8 +5,15 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  const topics = await getActiveTopics();
-
-  // クライアントコンポーネントにデータを渡す
-  return <HomeClient initialTopics={topics} />;
+  try {
+    const topics = await getActiveTopics();
+    
+    // クライアントコンポーネントにデータを渡す
+    return <HomeClient initialTopics={topics} />;
+  } catch (error) {
+    console.error("トピック取得エラー:", error);
+    
+    // エラーが発生した場合は空の配列を渡す
+    return <HomeClient initialTopics={[]} />;
+  }
 }

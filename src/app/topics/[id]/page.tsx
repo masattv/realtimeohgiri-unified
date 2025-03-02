@@ -13,17 +13,27 @@ interface TopicPageProps {
 }
 
 export default async function TopicPage(props: TopicPageProps) {
-  const { id } = await props.params;
+  try {
+    const { id } = await props.params;
 
-  const topic = await getTopicById(id);
+    try {
+      const topic = await getTopicById(id);
 
-  if (!topic) {
-    notFound();
+      if (!topic) {
+        notFound();
+      }
+
+      // トピックIDに関連する回答を取得
+      const answers = await getAnswersByTopicId(id);
+
+      // クライアントコンポーネントにデータを渡す
+      return <TopicClient initialTopic={topic} initialAnswers={answers} />;
+    } catch (dbError: any) {
+      console.error(`データベースエラー (トピックID: ${id}):`, dbError);
+      throw new Error(`トピックの取得中にエラーが発生しました: ${dbError.message}`);
+    }
+  } catch (paramsError) {
+    console.error("パラメータ取得エラー:", paramsError);
+    throw new Error("ページパラメータの取得中にエラーが発生しました");
   }
-
-  // トピックIDに関連する回答を取得
-  const answers = await getAnswersByTopicId(id);
-
-  // クライアントコンポーネントにデータを渡す
-  return <TopicClient initialTopic={topic} initialAnswers={answers} />;
 } 
