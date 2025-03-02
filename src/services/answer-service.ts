@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { CreateAnswerInput, Answer } from '@/lib/types';
-import { evaluateAnswer } from '@/lib/openai';
+import { evaluateAnswer, generateReviewComment } from '@/lib/openai';
 import { Prisma } from '@prisma/client';
 
 export async function getAnswersByTopicId(topicId: string): Promise<Answer[]> {
@@ -38,6 +38,9 @@ export async function createAnswer(data: CreateAnswerInput): Promise<Answer> {
 
   // OpenAIで回答を評価
   const score = await evaluateAnswer(topic.content, data.content);
+  
+  // 評価コメントを生成
+  const reviewComment = await generateReviewComment(topic.content, data.content, score);
 
   // 回答を作成
   return db.answer.create({
@@ -45,6 +48,7 @@ export async function createAnswer(data: CreateAnswerInput): Promise<Answer> {
       content: data.content,
       topicId: data.topicId,
       score,
+      reviewComment,
     },
   });
 }

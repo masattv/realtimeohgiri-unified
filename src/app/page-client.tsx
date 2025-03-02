@@ -73,72 +73,120 @@ export default function HomeClient({ initialTopics }: HomeClientProps) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">リアルタイム大喜利</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          面白いお題に回答して、みんなで盛り上がろう！
-        </p>
-      </header>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">アクティブなお題</h2>
-        {topics.length === 0 ? (
-          <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg text-center">
-            <p>現在アクティブなお題はありません。</p>
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-12">
+        {/* ヘッダー */}
+        <header className="mb-16 text-center">
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-300">
+            リアルタイム大喜利
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            AIが評価する面白さ競争。あなたのユーモアセンスを試してみませんか？
+          </p>
+          
+          <div className="mt-8 flex justify-center space-x-4">
+            <Link
+              href="/"
+              className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl"
+            >
+              ホーム
+            </Link>
+            <Link
+              href="/admin"
+              className="px-6 py-3 bg-white text-blue-600 border border-blue-200 rounded-full hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl"
+            >
+              管理者ページ
+            </Link>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {topics.map((topic) => (
-              <Link
-                key={topic.id}
-                href={`/topics/${topic.id}`}
-                className="block bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="font-medium mb-2">{topic.content}</div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">
-                  回答数: {topic.answers?.length || 0}
-                </div>
-                <div className="mt-4">
-                  <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-xs px-2 py-1 rounded">
-                    アクティブ
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+        </header>
 
-      <div>
-        <h2 className="text-xl font-semibold mb-4">お題を投稿する</h2>
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="content" className="block mb-2 text-sm font-medium">
-                お題の内容
-              </label>
-              <textarea
-                id="content"
-                name="content"
-                rows={3}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="面白いお題を入力してください..."
-                required
-              ></textarea>
+        {/* メインコンテンツ */}
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">アクティブなお題</h2>
+          
+          {/* お題カード */}
+          {topics.length === 0 ? (
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-10 text-center">
+              <div className="text-gray-500 dark:text-gray-400 text-lg">
+                <p>現在アクティブなお題はありません。</p>
+                <p className="mt-2">4時間ごとに新しいお題が自動生成されます。</p>
+              </div>
             </div>
-            <div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              >
-                {isSubmitting ? '送信中...' : '投稿する'}
-              </button>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {topics.map((topic) => (
+                <Link
+                  key={topic.id}
+                  href={`/topics/${topic.id}`}
+                  className="group block"
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all p-6 h-full flex flex-col">
+                    <div className="flex-1">
+                      <div className="mb-4 flex justify-between items-start">
+                        <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-xs px-2 py-1 rounded-full">
+                          アクティブ
+                        </span>
+                        {topic.isAutoGenerated && (
+                          <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs px-2 py-1 rounded-full">
+                            AI生成
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {topic.content}
+                      </h3>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                          回答数: {topic.answers?.length || 0}
+                        </span>
+                        <span className="text-blue-600 dark:text-blue-400 text-sm font-medium group-hover:underline">
+                          参加する →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
-          </form>
+          )}
+        </div>
+        
+        {/* お題投稿セクション（オプション） */}
+        <div className="max-w-2xl mx-auto mt-20">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 className="text-2xl font-bold mb-6">新しいお題を提案</h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              面白いお題のアイデアがあれば、ぜひ提案してください。管理者が確認後、採用されることがあります。
+            </p>
+            <form className="space-y-4" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="content" className="block mb-2 text-sm font-medium">
+                  お題の内容
+                </label>
+                <textarea
+                  id="content"
+                  name="content"
+                  rows={3}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700"
+                  placeholder="面白いお題を入力してください..."
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-xl hover:from-blue-700 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition-all shadow-md hover:shadow-lg"
+                >
+                  {isSubmitting ? '送信中...' : 'お題を提案する'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

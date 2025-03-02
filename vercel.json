@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/generate-topic?key=USE_ENVIRONMENT_VARIABLE_HERE",
+      "schedule": "0 */4 * * *"
+    }
+  ]
+} 
