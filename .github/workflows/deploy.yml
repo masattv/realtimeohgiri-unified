@@ -29,11 +29,16 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           
+      # Vercelデプロイアクション
+      # 以下のシークレットをGitHubに設定する必要があります:
+      # - VERCEL_TOKEN (Vercelの個人アクセストークン)
+      # - VERCEL_ORG_ID (team_pXZzY3cSu8AI2xKV7UqMFovI)
+      # - VERCEL_PROJECT_ID (prj_3ci4f7LIdOF811ESRShndsKf67vV)
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}  # team_pXZzY3cSu8AI2xKV7UqMFovI
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}  # prj_3ci4f7LIdOF811ESRShndsKf67vV
           working-directory: ./ 
