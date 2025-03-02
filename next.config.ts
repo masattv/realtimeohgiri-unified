@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  // Turbopackの設定（dev:turboコマンド用）
+  // これにより、TurbopackとWebpackの競合警告が解消されます
+  turbo: {
+    // TurbopackとWebpackの競合を解消するための設定
+    resolveAlias: {
+      // 必要に応じて追加のエイリアス設定を行う
+    },
+  },
   // serverActionsの設定を修正
   experimental: {
     serverActions: {

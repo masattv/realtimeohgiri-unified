@@ -13,6 +13,12 @@ const checkDatabaseUrl = () => {
     return false;
   }
   
+  // パスワードプレースホルダーが置換されたか確認
+  if (process.env.DATABASE_URL.includes('${DATABASE_PASSWORD}')) {
+    console.warn('警告: DATABASE_URLのパスワードプレースホルダーが置換されていません。DATABASE_PASSWORDが設定されているか確認してください。');
+    return false;
+  }
+  
   // 必要な認証情報が含まれているか確認
   if (!process.env.DATABASE_URL.includes(':') || !process.env.DATABASE_URL.includes('@')) {
     console.warn('警告: DATABASE_URLのフォーマットが正しくありません。必要な認証情報が含まれていない可能性があります。');
