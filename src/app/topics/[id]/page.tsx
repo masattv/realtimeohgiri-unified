@@ -28,11 +28,12 @@ export default async function TopicPage(props: TopicPageProps) {
 
       // クライアントコンポーネントにデータを渡す
       return <TopicClient initialTopic={topic} initialAnswers={answers} />;
-    } catch (dbError: any) {
+    } catch (dbError: unknown) {
       console.error(`データベースエラー (トピックID: ${id}):`, dbError);
-      throw new Error(`トピックの取得中にエラーが発生しました: ${dbError.message}`);
+      const errorMessage = dbError instanceof Error ? dbError.message : '不明なエラー';
+      throw new Error(`トピックの取得中にエラーが発生しました: ${errorMessage}`);
     }
-  } catch (paramsError) {
+  } catch (paramsError: unknown) {
     console.error("パラメータ取得エラー:", paramsError);
     throw new Error("ページパラメータの取得中にエラーが発生しました");
   }
