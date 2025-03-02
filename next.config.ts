@@ -18,12 +18,17 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
-  // serverActionsの設定をオブジェクト形式で追加
+  // serverActionsの設定を修正
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:3001', 'localhost:3002', 'realtimeohgiri-unified.vercel.app']
-    },
-    turbo: {}
+      allowedOrigins: [
+        'localhost:3000', 
+        'localhost:3001', 
+        'localhost:3002', 
+        'localhost:3003',
+        'realtimeohgiri-unified.vercel.app'
+      ]
+    }
   }
 };
 
