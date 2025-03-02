@@ -19,7 +19,7 @@ export type Answer = {
   topic?: Topic;
   score: number;
   isSelected: boolean;
-  reviewComment?: string;
+  reviewComment?: string | null;
 };
 
 // トピック作成用の型

@@ -12,7 +12,7 @@ interface AdminDashboardProps {
 
 export default function AdminDashboard({ initialTopics, initialActiveTopics }: AdminDashboardProps) {
   const [topics, setTopics] = useState<Topic[]>(initialTopics);
-  const [activeTopics, setActiveTopics] = useState<Topic[]>(initialActiveTopics);
+  const [, setActiveTopics] = useState<Topic[]>(initialActiveTopics);
   const [newTopicContent, setNewTopicContent] = useState('');
   const [loading, setLoading] = useState(false);
   

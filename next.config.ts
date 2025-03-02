@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  // serverActionsの設定をオブジェクト形式で追加
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'localhost:3001', 'localhost:3002']
+    }
+  }
 };
 
 export default nextConfig;
